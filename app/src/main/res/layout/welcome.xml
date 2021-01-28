@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-   android:background="@drawable/interface2"
-
-
+    android:background="@drawable/interface2"
 
 
     >
@@ -22,7 +19,6 @@
         android:gravity="center"
 
 
-
         android:soundEffectsEnabled="?android:attr/windowSwipeToDismiss"
         android:text="Welcome To"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
@@ -35,18 +31,16 @@
 
     <ImageView
         android:id="@+id/imageView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#80000000"
-        a
+        android:layout_width="400dp"
+        android:layout_height="600dp"
+        android:layout_marginTop="132dp"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@color/design_default_color_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="warch"
+        app:srcCompat="@drawable/icon" />
 
-            app:srcCompat="@drawable/welcome"
-            tools:layout_editor_absoluteX="149dp"
-            tools:layout_editor_absoluteY="286dp" />
 
-
-        />
-
-
-    >
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
