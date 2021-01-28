@@ -21,6 +21,8 @@
         android:layout_marginEnd="177dp"
         android:gravity="center"
 
+
+
         android:soundEffectsEnabled="?android:attr/windowSwipeToDismiss"
         android:text="Welcome To"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
@@ -30,4 +32,21 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#80000000"
+        a
+
+            app:srcCompat="@drawable/welcome"
+            tools:layout_editor_absoluteX="149dp"
+            tools:layout_editor_absoluteY="286dp" />
+
+
+        />
+
+
+    >
+    </androidx.constraintlayout.widget.ConstraintLayout>
