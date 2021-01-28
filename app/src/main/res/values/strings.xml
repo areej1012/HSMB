@@ -10,4 +10,18 @@
     <string name="menu_home">Vital signs</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="body_temperature">Body Temperature</string>
+    <string name="Num_body_temperature">00.0</string>
+    <string name="heart_rate">Heart Rate</string>
+    <string name="Num_heart_rate">00</string>
+    <string name="Bpm">Bpm</string>
+    <string name="Oxygen_blood">Blood oxygen </string>
+    <string name="Num_Oxygen_blood">00 %</string>
+    <string name="blood_pressure">blood pressure</string>
+    <string name="Num_blood_pressure">000-00</string>
+    <string name="mmHg">mmHg</string>
+    <string name="location">Nearest booth location</string>
+    <string name="name_pilgrim">name pilgrim</string>
+
+
 </resources>
