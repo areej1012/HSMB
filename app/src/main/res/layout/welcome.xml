@@ -2,33 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
 
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:gravity="center_horizontal"
-android:orientation="vertical"
-android:background="@drawable/interface2"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/welcome"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/interface2"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:fillViewport="true">
 
 
-    >
+    <ImageView
 
 
-<ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="700dp"
+        android:layout_height="222dp"
+        android:layout_marginTop="120dp"
 
+        android:layout_weight="1"
+        android:src="@drawable/iconremovebgpreview" />
 
-    android:id="@+id/imageView2"
-    android:layout_width="700dp"
-    android:layout_height="337dp"
-    android:layout_marginTop="120dp"
-
-    android:layout_weight="1"
-    android:src="@drawable/iconremovebgpreview" />
-
-<ImageView
-    android:id="@+id/imageView3"
-    android:layout_width="423dp"
-    android:layout_height="620dp"
-    android:layout_gravity="center"
-    android:layout_weight="3"
-    android:src="@drawable/textee" />
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="423dp"
+        android:layout_height="433dp"
+        android:layout_gravity="center"
+        android:layout_weight="3"
+        android:src="@drawable/textee" />
 </LinearLayout>

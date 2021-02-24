@@ -27,21 +27,7 @@ public class HomeFragment extends Fragment {
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-/*
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        Button location = root.findViewById(R.id.location);
-        location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new GalleryFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.locatonBooth, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();            }
-        });
 
-        return root;*/
         binding=FragmentHomeBinding.inflate(getLayoutInflater());
         return binding.getRoot();
 
@@ -71,4 +57,6 @@ public class HomeFragment extends Fragment {
         super.onDestroy();
         binding=null;
     }
+
+    
 }
