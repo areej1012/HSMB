@@ -63,7 +63,6 @@ public class LoginActivity extends AppCompatActivity {
                 for (int i=0; login.size()>i;i++){
                     if(login.get(i).getUsername().equals(username) && login.get(i).getPassword().equals(password)){
                         Intent nextScreen = new Intent(LoginActivity.this,  ActivityMain.class);
-                        nextScreen.putExtra("user",login.get(i));
                         startActivity(nextScreen);
 
                     }
