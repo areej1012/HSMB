@@ -37,6 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Initialize fused location
         client = LocationServices.getFusedLocationProviderClient(this);
         getCurrentLocation();
+
     }
 
     private void getCurrentLocation() {
@@ -71,10 +72,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(21.661369, 39.219871);
         LatLng ma=new LatLng(21.603238,39.274832);
-        LatLng myLocation=new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+//        LatLng myLocation=new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.addMarker(new MarkerOptions().position(ma).title("ma"));
-        mMap.addMarker(new MarkerOptions().position(myLocation).title("my location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,20));
+      //  mMap.addMarker(new MarkerOptions().position(myLocation).title("my location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,20));
     }
 }
