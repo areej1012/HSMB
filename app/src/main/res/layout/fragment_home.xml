@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/whatsapp_image_2021_01_24_at_10_04_15_pm"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".HomeFragment">
 
     <Button
         android:id="@+id/location"
@@ -198,21 +198,6 @@
         app:layout_constraintStart_toEndOf="@+id/imageView8"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:layout_constraintVertical_bias="0.386" />
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="40dp"
-        android:layout_height="22dp"
-        android:text="@string/mmHg"
-        android:textColor="#2D4450"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/location"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.269"
-        app:layout_constraintStart_toEndOf="@+id/blood_pressure"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/blood_pressure"
