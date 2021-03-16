@@ -82,21 +82,37 @@ public class HomeFragment extends Fragment implements
     private GoogleApiClient GoogleApiClient;
     private static final int REQUEST_OAUTH = 1001;
     TextView blood_pressure;
+    TextView heartRate;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding=FragmentHomeBinding.inflate(getLayoutInflater());
+
+        GoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(Fitness.HISTORY_API)
+                .enableAutoManage(getActivity(),this)
+                .addScope(new Scope(Scopes.FITNESS_BLOOD_PRESSURE_READ_WRITE))
+                .addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
+                .addConnectionCallbacks(this)
+                .build();
+        GoogleApiClient.connect();
 
 
         return binding.getRoot();
 
     }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        GoogleApiClient.stopAutoManage(getActivity());
+        GoogleApiClient.disconnect();
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
        blood_pressure= getView().findViewById(R.id.blood_pressure);
+       heartRate =getView().findViewById(R.id.heart_rate);
 
 
 
@@ -114,37 +130,52 @@ public class HomeFragment extends Fragment implements
         });
     }
 
-    private void WriteHealthData() {
+
+    private void accessGoogleFitBP() {
         Calendar cal = Calendar.getInstance();
-        Date now = new Date();
-        cal.setTime(now);
-        long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.HOUR_OF_DAY, -1);
-        long startTime = cal.getTimeInMillis();
+        cal.setTime(new Date());
+        long endtime = cal.getTimeInMillis();
+        cal.add(Calendar.YEAR, -1);
+        long starttime = cal.getTimeInMillis();
 
-        DataSource bloodPressureSource = new DataSource.Builder()
-                .setAppPackageName("com.example.hsmb")
-                .setDataType(HealthDataTypes.TYPE_OXYGEN_SATURATION)
-                .setStreamName("Oxygen Saturation")
-                .setType(DataSource.TYPE_RAW)
+        DataReadRequest readRequest = new DataReadRequest.Builder()
+                .aggregate(TYPE_BLOOD_PRESSURE, HealthDataTypes.AGGREGATE_BLOOD_PRESSURE_SUMMARY)
+                .bucketByTime(1, TimeUnit.DAYS)
+                .setTimeRange(starttime, endtime, TimeUnit.MILLISECONDS)
                 .build();
-        DataSet set = DataSet.create(bloodPressureSource);
-        DataPoint bloodPressure = set.createDataPoint().setTimeInterval(startTime, endTime, MILLISECONDS);
-        bloodPressure.setTimestamp(System.currentTimeMillis(), MILLISECONDS);
-        bloodPressure.getValue(FIELD_OXYGEN_SATURATION).setFloat(97.0f);
-        bloodPressure.getValue(FIELD_SUPPLEMENTAL_OXYGEN_FLOW_RATE).setFloat(3.0f);
-        bloodPressure.getValue(FIELD_OXYGEN_THERAPY_ADMINISTRATION_MODE).setInt(OXYGEN_THERAPY_ADMINISTRATION_MODE_NASAL_CANULA);
-        bloodPressure.getValue(FIELD_OXYGEN_SATURATION_SYSTEM)
-                .setInt(OXYGEN_SATURATION_SYSTEM_PERIPHERAL_CAPILLARY);
-        bloodPressure.getValue(FIELD_OXYGEN_SATURATION_MEASUREMENT_METHOD).setInt(OXYGEN_SATURATION_MEASUREMENT_METHOD_PULSE_OXIMETRY);
-        set.add(bloodPressure);
-        Fitness.HistoryApi.insertData(GoogleApiClient,set);
-        Log.e("Dine ","insert");
+
+        Fitness.getHistoryClient(getActivity(),GoogleSignIn.getLastSignedInAccount(getContext()))
+                .readDailyTotal(TYPE_BLOOD_PRESSURE)
+                .addOnSuccessListener(new OnSuccessListener<DataSet>() {
+                    @Override
+                    public void onSuccess(DataSet dataSet) {
+                        Log.e("Status","Success");
+                        if(dataSet.isEmpty()){
+                            Log.e("Value",String.valueOf(0));
+                        }
+                        else {
+                           blood_pressure.setText(showDataSetBP(dataSet));
+                        }
 
 
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Status","Failure",e);
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<DataSet>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSet> task) {
+                        Log.d("Status","Complete");
+
+                    }
+                });
     }
 
-    private void accessGoogleFit() {
+    private void accessGoogleFitHR() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         long endtime = cal.getTimeInMillis();
@@ -167,7 +198,7 @@ public class HomeFragment extends Fragment implements
                             Log.e("Value",String.valueOf(0));
                         }
                         else {
-                            showDataSet(dataSet);
+                          heartRate.setText(showDataSetHR(dataSet));
                         }
 
 
@@ -187,46 +218,9 @@ public class HomeFragment extends Fragment implements
                     }
                 });
     }
-    public void BloodPressure() {
-        long week =100*60*60*24*7;
-        Date now = new Date();
-        long endTime = now.getTime();
-        long startTime = endTime -(week);
-//Check how many steps were walked and recorded in the last 7 days
-        DataReadRequest readRequest = new DataReadRequest.Builder()
-                .aggregate(TYPE_BLOOD_PRESSURE,HealthDataTypes.AGGREGATE_BLOOD_PRESSURE_SUMMARY)
-                .bucketByTime(1, TimeUnit.DAYS) //important thing
-                .setTimeRange(startTime, endTime, MILLISECONDS)
-                .enableServerQueries()
-                .build();
 
-        PendingResult pendingResult= Fitness.HistoryApi.readData(GoogleApiClient,readRequest);
-        pendingResult.setResultCallback(
-                new ResultCallback<DataReadResult>() {
-                    @Override
-                    public void onResult(@NonNull DataReadResult dataReadResult) {
-                        if (dataReadResult.getBuckets().size() > 0) {
-                            Log.e("History", "Number of buckets: " + dataReadResult.getBuckets().size());
-                            for (Bucket bucket : dataReadResult.getBuckets()) {
-                                List<DataSet> dataSets = bucket.getDataSets();
-                                for (DataSet dataSet : dataSets) {
-                                    showDataSet(dataSet);
-                                }
-                            }
-                        }
-//Used for non-aggregated data
-                        else if (dataReadResult.getDataSets().size() > 0) {
-                            Log.e("History", "Number of returned DataSets: " + dataReadResult.getDataSets().size());
-                            for (DataSet dataSet : dataReadResult.getDataSets()) {
-                                showDataSet(dataSet);
-                            }
-                        }
-                    }
-                }
-        );
-    }
 
-    private void showDataSet(DataSet dataSet) {
+    private String showDataSetHR(DataSet dataSet) {
         Log.e("History", "Data returned for Data type: " + dataSet.getDataType().getName());
         DateFormat dateFormat = DateFormat.getDateInstance();
         DateFormat timeFormat = DateFormat.getTimeInstance();
@@ -241,27 +235,38 @@ public class HomeFragment extends Fragment implements
                         " Value: " + dp.getValue(field));
 
             }
-       /*     blood_pressure.setText(""+dp.getValue(dp.getDataType().getFields().get(0)).asFloat()+"/"
-                    +dp.getValue(dp.getDataType().getFields().get(3)).asFloat()
-            +" mmHg");*/
+            return ""+ dp.getValue(dp.getDataType().getFields().get(0)).asFloat() +" Bpm";
         }
+        return "";
+    }
+
+
+    private String showDataSetBP(DataSet dataSet) {
+        Log.e("History", "Data returned for Data type: " + dataSet.getDataType().getName());
+        DateFormat dateFormat = DateFormat.getDateInstance();
+        DateFormat timeFormat = DateFormat.getTimeInstance();
+
+        for (DataPoint dp : dataSet.getDataPoints()) {
+            Log.e("History", "Data point:");
+            Log.e("History", "\tType: " + dp.getDataType().getName());
+            Log.e("History", "\tStart: " + dateFormat.format(dp.getStartTime(MILLISECONDS)) + " " + timeFormat.format(dp.getStartTime(MILLISECONDS)));
+            Log.e("History", "\tEnd: " + dateFormat.format(dp.getEndTime(MILLISECONDS)) + " " + timeFormat.format(dp.getStartTime(MILLISECONDS)));
+            for(Field field : dp.getDataType().getFields()) {
+                Log.e("History", "\tField: " + field.getName() +
+                        " Value: " + dp.getValue(field));
+
+            }
+                return ""+ dp.getValue(dp.getDataType().getFields().get(0)).asFloat()+"/"
+                    +dp.getValue(dp.getDataType().getFields().get(3)).asFloat()
+            +" mmHg";
+        }
+        return "";
     }
 
 
     @Override
     public void onStart() {
         super.onStart();
-
-        GoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .addApi(Fitness.HISTORY_API)
-                .enableAutoManage(getActivity(),this)
-                .addScope(new Scope(Scopes.FITNESS_BLOOD_PRESSURE_READ_WRITE))
-                .addScope(new Scope(Scopes.FITNESS_BODY_TEMPERATURE_READ_WRITE))
-                .addScope(new Scope(Scopes.FITNESS_OXYGEN_SATURATION_READ_WRITE))
-                .addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
-                .addConnectionCallbacks(this)
-                .build();
-        GoogleApiClient.connect();
 
     }
 
@@ -304,7 +309,8 @@ Log.e("google fit","connected ");
                     GoogleSignIn.getLastSignedInAccount(getContext()),
                     fitnessOptions);
         } else {
-            accessGoogleFit();
+            accessGoogleFitBP();
+            accessGoogleFitHR();
         }
 
     /* Calendar cal = Calendar.getInstance();
