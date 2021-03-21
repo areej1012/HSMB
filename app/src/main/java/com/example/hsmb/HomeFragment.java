@@ -42,15 +42,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static android.content.Intent.getIntent;
+import static android.content.Intent.getIntentOld;
 import static com.google.android.gms.fitness.data.HealthDataTypes.TYPE_BLOOD_PRESSURE;
 import static com.google.android.gms.fitness.data.HealthFields.BLOOD_PRESSURE_MEASUREMENT_LOCATION_LEFT_UPPER_ARM;
 import static com.google.android.gms.fitness.data.HealthFields.BODY_POSITION_SITTING;
@@ -83,9 +90,17 @@ public class HomeFragment extends Fragment implements
     private static final int REQUEST_OAUTH = 1001;
     TextView blood_pressure;
     TextView heartRate;
+    TextView SpO2;
+    TextView bodyTemperature;
+    TextView name;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding=FragmentHomeBinding.inflate(getLayoutInflater());
+
+
+
 
         GoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .addApi(Fitness.HISTORY_API)
@@ -113,6 +128,9 @@ public class HomeFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
        blood_pressure= getView().findViewById(R.id.blood_pressure);
        heartRate =getView().findViewById(R.id.heart_rate);
+       bodyTemperature=getView().findViewById(R.id.body_temperature);
+       SpO2=getView().findViewById(R.id.oxygen_blood);
+       name=getView().findViewById(R.id.name);
 
 
 
@@ -309,34 +327,36 @@ Log.e("google fit","connected ");
                     GoogleSignIn.getLastSignedInAccount(getContext()),
                     fitnessOptions);
         } else {
+            List<vital> vitals = new ArrayList<>();
+            Random rand =new Random();
             accessGoogleFitBP();
             accessGoogleFitHR();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("vital")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                            if(task.isSuccessful()){
+                                for(QueryDocumentSnapshot document : task.getResult()) {
+                                    vital miss = document.toObject(vital.class);
+                                    vitals.add(miss);
+                                }
+                                int i= rand.nextInt(vitals.size());
+                                bodyTemperature.setText("\u2103"+vitals.get(i).getST());
+                                SpO2.setText(vitals.get(i).getSpO2()+"%");
+
+
+
+                            } else {
+                                Log.d("MissionActivity", "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+
         }
 
-    /* Calendar cal = Calendar.getInstance();
-        Date now = new Date();
-        cal.setTime(now);
-        long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.HOUR_OF_DAY, -1);
-        long startTime = cal.getTimeInMillis();
-
-        DataSource bloodPressureSource = new DataSource.Builder()
-                .setAppPackageName("com.example.hsmb")
-                .setDataType(TYPE_BLOOD_PRESSURE)
-                .setStreamName("blood pressure")
-                .setType(DataSource.TYPE_RAW)
-                .build();
-        DataSet set = DataSet.create(bloodPressureSource);
-        DataPoint bloodPressure = set.createDataPoint().setTimeInterval(startTime, endTime, MILLISECONDS);
-        bloodPressure.setTimestamp(System.currentTimeMillis(), MILLISECONDS);
-        bloodPressure.getValue(FIELD_BLOOD_PRESSURE_SYSTOLIC).setFloat(120.0f);
-        bloodPressure.getValue(FIELD_BLOOD_PRESSURE_DIASTOLIC).setFloat(80.0f);
-        bloodPressure.getValue(FIELD_BODY_POSITION).setInt(BODY_POSITION_SITTING);
-        bloodPressure.getValue(FIELD_BLOOD_PRESSURE_MEASUREMENT_LOCATION)
-                .setInt(BLOOD_PRESSURE_MEASUREMENT_LOCATION_LEFT_UPPER_ARM);
-        set.add(bloodPressure);
-        Fitness.HistoryApi.insertData(GoogleApiClient,set);
-        Log.e("done"," ir"+ set.isEmpty());*/
     }
 
     @Override

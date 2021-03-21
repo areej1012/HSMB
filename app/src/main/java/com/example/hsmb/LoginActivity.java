@@ -1,81 +1,105 @@
 package com.example.hsmb;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-import androidx.lifecycle.Observer;
-import android.text.Editable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     //refrence button and other control wedight on layout
-    EditText usernameEditText ;
+    EditText emailEditText;
     EditText passwordEditText;
     Button loginButton;
+    private FirebaseAuth mAuth;
+    private String email;
 
+    public String getEmail() {
+        return email;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        usernameEditText = findViewById(R.id.username);
+        emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
-         loginButton = findViewById(R.id.submit);
-         String username=usernameEditText.getText().toString();
-         String password=passwordEditText.getText().toString();
-
-
-
-
+        loginButton = findViewById(R.id.submit);
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        mAuth = FirebaseAuth.getInstance();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-
-
-
-             if(!username.isEmpty()){
-                 usernameEditText.setError("Username ");
-             }
-             else if(!password.isEmpty()){
-                 passwordEditText.setError("password");
-             }
-                DBconcation db =new DBconcation(LoginActivity.this);
-                List<AccountPligrim> login= db.getAllRecoredLogin(usernameEditText.getText().toString());
-                for (int i=0; login.size()>i;i++){
-                    if(login.get(i).getUsername().equals(username) && login.get(i).getPassword().equals(password)){
-                        Intent nextScreen = new Intent(LoginActivity.this,  ActivityMain.class);
-                        startActivity(nextScreen);
-
-                    }
-                    else{
-                        Toast.makeText(LoginActivity.this, "you aren't registered in application",Toast.LENGTH_LONG);
-                    }
+                if (!email.isEmpty()) {
+                    emailEditText.setError("Username ");
+                    return;
+                }  if (!password.isEmpty()) {
+                    passwordEditText.setError("password");
+                    return;
                 }
-
-
+                signIn(emailEditText.getText().toString(),passwordEditText.getText().toString(),savedInstanceState);
 
             }
         });
 
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            currentUser.reload();
+
+
+        }
+    }
+
+    private void updateUI(FirebaseUser user, Bundle savedInstanceState) {
+
+        Intent nextScreen = new Intent(LoginActivity.this,  ActivityMain.class);
+
+        startActivity(nextScreen);
+
+    }
+
+    private void signIn(String email, String password,Bundle savedInstanceState) {
+        // [START sign_in_with_email]
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("auth", "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user,savedInstanceState);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("auth", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
 
     }
 }
