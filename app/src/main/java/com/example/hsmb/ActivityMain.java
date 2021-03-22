@@ -3,10 +3,12 @@ package com.example.hsmb;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -44,14 +46,23 @@ public class ActivityMain extends AppCompatActivity {
 
     }
 
-    public void to_vital(View v){
-        Intent intent=new Intent(ActivityMain.this,HomeFragment.class);
-        startActivity(intent);
-    }
-    public void to_map(View view1){
-        Intent intent1=new Intent(ActivityMain.this,MapsActivity.class);
-        startActivity(intent1);
-    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id=item.getItemId();
+        if(id==R.id.nav_VitalSigns){
+            Intent intent=new Intent(ActivityMain.this,HomeFragment.class);
+            startActivity(intent);
+            return true;
+        }
+        else
+        if(id==R.id.nav_Map){
+            Intent intent1=new Intent(ActivityMain.this,MapsActivity.class);
+            startActivity(intent1);
+            return true;
+        }
+
+    return super.onOptionsItemSelected(item);}
+
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
