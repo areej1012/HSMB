@@ -1,5 +1,6 @@
 package com.example.hsmb;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -39,8 +40,17 @@ public class ActivityMain extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+
     }
 
+    public void to_vital(View v){
+        Intent intent=new Intent(ActivityMain.this,HomeFragment.class);
+        startActivity(getIntent());
+    }
+    public void to_map(View1 view1){
+        Intent intent1=new Intent(ActivityMain.this,MapsActivity.class);
+        startActivity(getIntent());
+    }
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
