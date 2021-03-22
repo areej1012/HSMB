@@ -3,6 +3,7 @@ package com.example.hsmb;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -45,11 +46,11 @@ public class ActivityMain extends AppCompatActivity {
 
     public void to_vital(View v){
         Intent intent=new Intent(ActivityMain.this,HomeFragment.class);
-        startActivity(getIntent());
+        startActivity(intent);
     }
-    public void to_map(View1 view1){
+    public void to_map(View view1){
         Intent intent1=new Intent(ActivityMain.this,MapsActivity.class);
-        startActivity(getIntent());
+        startActivity(intent1);
     }
     @Override
     public boolean onSupportNavigateUp() {
