@@ -6,8 +6,6 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_VitalSigns"
-            android:checkable="true"
-            android:checked="false"
             android:icon="@drawable/_removebg_preview"
             android:onClick="to_vital"
             android:title="@string/menu_home" />
