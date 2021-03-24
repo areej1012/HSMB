@@ -19,12 +19,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     FusedLocationProviderClient client;
     private static final int REQUEST_CODE=101;
     Location currentLocation;
+
+
+    ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
+
+    LatLng all = new LatLng(21.3905547,40.0087896);
+    LatLng Booth1 = new LatLng(21.428756,39.9352357);
+    LatLng Booth2=new LatLng(21.384893,39.9546247);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +42,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map2);
-        mapFragment.getMapAsync(MapsActivity.this);
+        mapFragment.getMapAsync(this);
         //Initialize fused location
         client = LocationServices.getFusedLocationProviderClient(this);
-
+        getCurrentLocation();
 
     }
 
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,new String[]
+                    {Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+            return;
+        }
+        Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location!=null)
+                currentLocation=location;
+            }
+        });
+    }
 
     /**
      * Manipulates the map once available.
@@ -54,18 +78,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(21.661369, 39.219871);
-        LatLng ma=new LatLng(21.603238,39.274832);
-//        LatLng myLocation=new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.addMarker(new MarkerOptions().position(ma).title("ma"));
-      //  mMap.addMarker(new MarkerOptions().position(myLocation).title("my location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,20));
+        for(int i=0;i<arrayList.size();i++){
+            mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Marker"));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.5f));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
     }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-}
+}}

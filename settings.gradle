@@ -1,2 +1,3 @@
+include ':prototype'
 include ':app'
 rootProject.name = "HSMB"
