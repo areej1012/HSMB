@@ -3,6 +3,7 @@ package com.example.hsmb;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -17,13 +18,18 @@ import androidx.navigation.ui.NavigationUI;
 
 public class ActivityMain extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
+    private String eamil;
+
+    public String getEamil() {
+        return eamil;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        eamil=getIntent().getStringExtra("eamil");
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -43,14 +49,14 @@ public class ActivityMain extends AppCompatActivity {
 
     }
 
-    public void to_vital(View v){
+  /*  public void to_vital(View v){
         Intent intent=new Intent(ActivityMain.this,HomeFragment.class);
         startActivity(getIntent());
     }
-    public void to_map(View1 view1){
+    public void to_map(View view1){
         Intent intent1=new Intent(ActivityMain.this,MapsActivity.class);
         startActivity(getIntent());
-    }
+    }*/
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

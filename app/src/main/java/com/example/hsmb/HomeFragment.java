@@ -141,7 +141,7 @@ public class HomeFragment extends Fragment implements
        SpO2=getView().findViewById(R.id.oxygen_blood);
        name=getView().findViewById(R.id.name);
        ActivityMain m=  (ActivityMain) getActivity();
-       name.setText(m.getEmail());
+    //   String eamil=m.getEamil();
         FitnessOptions fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_HEART_RATE_SUMMARY, FitnessOptions.ACCESS_READ)
@@ -154,7 +154,7 @@ public class HomeFragment extends Fragment implements
                     GoogleSignIn.getLastSignedInAccount(getContext()),
                     fitnessOptions);
         }
-
+        List<Accountpilgrim> account = new ArrayList<>();
         FirebaseFirestore db =FirebaseFirestore.getInstance();
         db.collection("Account_For_pilgrim")
                 .get()
@@ -163,9 +163,20 @@ public class HomeFragment extends Fragment implements
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for(QueryDocumentSnapshot document : task.getResult()){
+                                Accountpilgrim miss = document.toObject(Accountpilgrim.class);
+                                Log.e("data",document.getData().toString());
 
+                                account.add(miss);
                             }
                         }
+                     /*   for (int i=0; account.size()> i;i++){
+                            if(account.get(i).getEamil().equals(eamil)){
+                                name.setText(account.get(i).getFirstName()+" "+account.get(i).getLastName());
+                            }
+                            else{
+                                name.setText("");
+                            }
+                        }*/
                     }
                 });
        reload();
