@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton;
     private FirebaseAuth mAuth;
     private String email;
+    private FirebaseUser user;
 
     public String getEmail() {
         return email;
@@ -37,27 +38,23 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.submit);
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
         mAuth = FirebaseAuth.getInstance();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                if (!email.isEmpty()) {
-                    emailEditText.setError("Username ");
+                if (emailEditText.getText().toString().isEmpty()) {
+                    emailEditText.setError("Please write your email! ");
                     return;
-                }  if (!password.isEmpty()) {
-                    passwordEditText.setError("password");
-                    return;
-                }
-                signIn(emailEditText.getText().toString(),passwordEditText.getText().toString(),savedInstanceState);
 
+                }  if (passwordEditText.getText().toString().isEmpty()) {
+                    passwordEditText.setError("Please write your password!");
+                    return;
+
+                }
+                    signIn(emailEditText.getText().toString(), passwordEditText.getText().toString());
             }
         });
-
-
     }
 
 
@@ -67,20 +64,25 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             currentUser.reload();
-
-
         }
     }
 
-    private void updateUI(FirebaseUser user, Bundle savedInstanceState) {
+    private void updateUI(FirebaseUser user) {
 
         Intent nextScreen = new Intent(LoginActivity.this,  ActivityMain.class);
-
+        nextScreen.putExtra("email", user.getEmail()) ;
         startActivity(nextScreen);
 
     }
 
-    private void signIn(String email, String password,Bundle savedInstanceState) {
+    public String getMyData() {
+        return user.getDisplayName();
+    }
+    public void setMyData(FirebaseUser user) {
+        this.user=user;
+    }
+
+    private void signIn(String email, String password) {
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -90,11 +92,11 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("auth", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user,savedInstanceState);
+                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("auth", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, "There is an error or you are not registered in the application!",
                                     Toast.LENGTH_SHORT).show();
 
                         }

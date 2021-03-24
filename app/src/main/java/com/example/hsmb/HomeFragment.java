@@ -1,17 +1,26 @@
 package com.example.hsmb;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -56,6 +65,7 @@ import java.util.concurrent.TimeUnit;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static android.content.Intent.getIntent;
 import static android.content.Intent.getIntentOld;
 import static com.google.android.gms.fitness.data.HealthDataTypes.TYPE_BLOOD_PRESSURE;
@@ -93,15 +103,13 @@ public class HomeFragment extends Fragment implements
     TextView SpO2;
     TextView bodyTemperature;
     TextView name;
+    Handler mHandler;
+    String ID="health";
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding=FragmentHomeBinding.inflate(getLayoutInflater());
-
-
-
-
         GoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .addApi(Fitness.HISTORY_API)
                 .enableAutoManage(getActivity(),this)
@@ -121,6 +129,7 @@ public class HomeFragment extends Fragment implements
         super.onPause();
         GoogleApiClient.stopAutoManage(getActivity());
         GoogleApiClient.disconnect();
+
     }
 
     @Override
@@ -131,8 +140,35 @@ public class HomeFragment extends Fragment implements
        bodyTemperature=getView().findViewById(R.id.body_temperature);
        SpO2=getView().findViewById(R.id.oxygen_blood);
        name=getView().findViewById(R.id.name);
+       ActivityMain m=  (ActivityMain) getActivity();
+       name.setText(m.getEmail());
+        FitnessOptions fitnessOptions = FitnessOptions.builder()
+                .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.AGGREGATE_HEART_RATE_SUMMARY, FitnessOptions.ACCESS_READ)
+                .build();
 
+        if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(getContext()), fitnessOptions)) {
+            GoogleSignIn.requestPermissions(
+                    this, // your activity
+                    1,
+                    GoogleSignIn.getLastSignedInAccount(getContext()),
+                    fitnessOptions);
+        }
 
+        FirebaseFirestore db =FirebaseFirestore.getInstance();
+        db.collection("Account_For_pilgrim")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document : task.getResult()){
+
+                            }
+                        }
+                    }
+                });
+       reload();
 
         binding.location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +183,97 @@ public class HomeFragment extends Fragment implements
             }
         });
     }
+private void reload(){
 
+
+        List<vital> vitals = new ArrayList<>();
+        Random rand =new Random();
+        accessGoogleFitBP();
+        accessGoogleFitHR();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("vital")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document : task.getResult()) {
+                                vital miss = document.toObject(vital.class);
+                                vitals.add(miss);
+                            }
+                            int i= rand.nextInt(vitals.size());
+                            String ST=vitals.get(i).getST();
+                            String spo2=vitals.get(i).getSpO2();
+                            bodyTemperature.setText("\u2103"+ST);
+                            SpO2.setText(spo2+"%");
+                            if(Float.parseFloat(ST)> 37.0){
+                                notification("Attention your Body temperature is high !");
+                            }
+                             if(Integer.parseInt(spo2)< 95){
+                                 notification("Attention your Blood oxygen is low !");
+                            }
+
+
+
+                        } else {
+                            Log.d("MissionActivity", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        refresh(100000);
+
+    }
+
+    private void notification(String s) {
+        creatNotificationChannel();
+        Intent notification = new Intent(getContext(),ActivityMain.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, notification, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(),"health")
+
+                .setContentTitle("Attention please")
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.notification)
+                .setContentText(s)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(s))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+
+// notificationId is a unique int for each notification that you must define
+        notificationManager.notify(0, builder.build());
+    }
+
+    private void creatNotificationChannel() {
+        NotificationManager notificationManager= (NotificationManager)getActivity().getSystemService(NOTIFICATION_SERVICE);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+
+            CharSequence name ="Health Notification";
+            String description="Include all the health Notification";
+            int importance =NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel notificationChannel =new NotificationChannel(ID,name,importance);
+            notificationChannel.setDescription(description);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+
+    private void refresh(int millisec) {
+        mHandler =new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                reload();
+            }
+        };
+        mHandler.postDelayed(runnable,millisec);
+    }
 
     private void accessGoogleFitBP() {
         Calendar cal = Calendar.getInstance();
@@ -253,6 +379,9 @@ public class HomeFragment extends Fragment implements
                         " Value: " + dp.getValue(field));
 
             }
+            if(dp.getValue(dp.getDataType().getFields().get(0)).asFloat() >100){
+
+            }
             return ""+ dp.getValue(dp.getDataType().getFields().get(0)).asFloat() +" Bpm";
         }
         return "";
@@ -315,48 +444,6 @@ public class HomeFragment extends Fragment implements
     public void onConnected(@Nullable Bundle bundle) {
 Log.e("google fit","connected ");
 
-        FitnessOptions fitnessOptions = FitnessOptions.builder()
-                .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
-                .addDataType(DataType.AGGREGATE_HEART_RATE_SUMMARY, FitnessOptions.ACCESS_READ)
-                .build();
-
-        if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(getContext()), fitnessOptions)) {
-            GoogleSignIn.requestPermissions(
-                    this, // your activity
-                    1,
-                    GoogleSignIn.getLastSignedInAccount(getContext()),
-                    fitnessOptions);
-        } else {
-            List<vital> vitals = new ArrayList<>();
-            Random rand =new Random();
-            accessGoogleFitBP();
-            accessGoogleFitHR();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("vital")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                            if(task.isSuccessful()){
-                                for(QueryDocumentSnapshot document : task.getResult()) {
-                                    vital miss = document.toObject(vital.class);
-                                    vitals.add(miss);
-                                }
-                                int i= rand.nextInt(vitals.size());
-                                bodyTemperature.setText("\u2103"+vitals.get(i).getST());
-                                SpO2.setText(vitals.get(i).getSpO2()+"%");
-
-
-
-                            } else {
-                                Log.d("MissionActivity", "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
-
-        }
-
     }
 
     @Override
@@ -392,6 +479,14 @@ Log.e("google fit","connected ");
             }
         } else {
             Log.e("GoogleFit", "requestCode NOT request_oauth");
+        }
+    }
+
+    class background extends Thread {
+
+        @Override
+        public void run() {
+            super.run();
         }
     }
 }

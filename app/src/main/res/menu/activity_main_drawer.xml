@@ -5,14 +5,14 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_VitalSigns"
+            android:id="@+id/nav_home"
             android:icon="@drawable/_removebg_preview"
-            android:onClick="to_vital"
+            android:onClick="onOptionsItemSelected"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_Map"
+            android:id="@+id/nav_gallery"
             android:icon="@drawable/location_icon_png_38_removebg_preview"
-            android:onClick="to_map"
+            android:onClick="onOptionsItemSelected"
             android:title="@string/menu_gallery" />
 
     </group>
