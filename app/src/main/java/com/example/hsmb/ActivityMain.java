@@ -1,14 +1,9 @@
 package com.example.hsmb;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
-import com.example.hsmb.ui.gallery.GalleryFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,18 +17,13 @@ import androidx.navigation.ui.NavigationUI;
 
 public class ActivityMain extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
-    String email;
-
-    public String getEmail() {
-        return email;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        email=getIntent().getStringExtra("email");
+
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -46,28 +36,20 @@ public class ActivityMain extends AppCompatActivity {
 
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.nav_home:
-                Intent intent=new Intent(ActivityMain.this,HomeFragment.class);
-                startActivity(intent);
-                return true;
-            case R.id.nav_gallery:
-                Intent intent1=new Intent(ActivityMain.this, GalleryFragment.class);
-                startActivity(intent1);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+
     }
 
     public void to_vital(View v){
         Intent intent=new Intent(ActivityMain.this,HomeFragment.class);
         startActivity(getIntent());
     }
-    public void to_map(View view1){
-
+    public void to_map(View1 view1){
+        Intent intent1=new Intent(ActivityMain.this,MapsActivity.class);
+        startActivity(getIntent());
     }
     @Override
     public boolean onSupportNavigateUp() {
