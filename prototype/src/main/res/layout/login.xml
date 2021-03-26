@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
     <!--Programming the page interface 2 (login)-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -10,61 +8,66 @@
     android:gravity="top"
     android:orientation="vertical">
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:fillViewport="false">
 
-    <ImageView
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="vertical"
+            android:scrollbars="vertical">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="180dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:layout_margin="92dp"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/iconremovebgpreview" />
+
+            <EditText
+                android:id="@+id/Email"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
+                android:ems="12"
+                android:hint="@string/Name"
+                android:inputType="text"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="wrap_content"
+                android:layout_height="61dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:ems="12"
+                android:hint="@string/Password"
+                android:inputType="textPassword"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/log_in"
+                android:layout_width="150dp"
+                android:layout_height="59dp"
+                android:layout_gravity="center"
+                android:layout_margin="45dp"
+                android:text="Log in"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:translationY="200px"
+                app:backgroundTint="#054A44"
+                app:iconTint="#FFFFFF" />
 
 
-        android:id="@+id/imageView2"
-
-        android:layout_width="180dp"
-        android:layout_height="160dp"
-        android:layout_gravity="center"
-        android:layout_margin="92dp"
-        android:layout_marginTop="50dp"
-
-
-        android:src="@drawable/iconremovebgpreview" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:layout_margin="1dp"
-
-
-        android:ems="12"
-        android:hint="@string/Name"
-        android:inputType="text"
-        android:textSize="20dp" />
-
-    <EditText
-        android:id="@+id/editTextTextPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="61dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-
-        android:ems="12"
-        android:hint="@string/Password"
-        android:inputType="textPassword"
-        android:textSize="20dp" />
-
-    <Button
-        android:id="@+id/log_in"
-        android:layout_width="150dp"
-        android:layout_height="59dp"
-        android:layout_gravity="center"
-
-        android:layout_margin="45dp"
-
-
-        android:text="Log in"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:translationY="200px"
-        app:backgroundTint="#054A44"
-        app:iconTint="#FFFFFF" />
-
-
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

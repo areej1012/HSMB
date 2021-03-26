@@ -2,6 +2,9 @@
     <string name="app_name">Prototype</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
-    <string name="Name"> UserName</string>
+    <string name="Name"> Email</string>
     <string name="Password"> Password</string>
+    <string name="login"> Login</string>
+    <string name="type">Who Are You?</string>
+    <string name="Hello">Hello pilgrim</string>
 </resources>

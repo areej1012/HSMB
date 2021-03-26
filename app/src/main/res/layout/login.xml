@@ -21,7 +21,6 @@
 android:layout_height="wrap_content"
 android:gravity="top"
 android:orientation="vertical"
-
     android:scrollbars="vertical">
 
 
