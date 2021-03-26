@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent nextScreen = new Intent(LoginActivity.this,  ActivityMain.class);
         nextScreen.putExtra("email", user.getEmail()) ;
+        Log.e("user",user.getEmail().trim());
         startActivity(nextScreen);
 
     }
@@ -96,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("auth", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "There is an error or you are not registered in the application!",
+                            Toast.makeText(LoginActivity.this, "The password is wrong or you are not registered in the application!",
                                     Toast.LENGTH_SHORT).show();
 
                         }

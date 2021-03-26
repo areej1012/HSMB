@@ -3,7 +3,6 @@ package com.example.hsmb;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
@@ -15,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,21 +30,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessOptions;
-import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataSource;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.data.HealthDataTypes;
-import com.google.android.gms.fitness.data.HealthFields;
 import com.google.android.gms.fitness.request.DataReadRequest;
-import com.google.android.gms.fitness.result.DataReadResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -66,25 +58,7 @@ import java.util.concurrent.TimeUnit;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static android.content.Intent.getIntent;
-import static android.content.Intent.getIntentOld;
 import static com.google.android.gms.fitness.data.HealthDataTypes.TYPE_BLOOD_PRESSURE;
-import static com.google.android.gms.fitness.data.HealthFields.BLOOD_PRESSURE_MEASUREMENT_LOCATION_LEFT_UPPER_ARM;
-import static com.google.android.gms.fitness.data.HealthFields.BODY_POSITION_SITTING;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_MEASUREMENT_LOCATION;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_BODY_POSITION;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_OXYGEN_SATURATION;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_OXYGEN_SATURATION_MEASUREMENT_METHOD;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_OXYGEN_SATURATION_SYSTEM;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_OXYGEN_THERAPY_ADMINISTRATION_MODE;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_SUPPLEMENTAL_OXYGEN_FLOW_RATE;
-import static com.google.android.gms.fitness.data.HealthFields.OXYGEN_SATURATION_MEASUREMENT_METHOD_PULSE_OXIMETRY;
-import static com.google.android.gms.fitness.data.HealthFields.OXYGEN_SATURATION_SYSTEM_PERIPHERAL_CAPILLARY;
-import static com.google.android.gms.fitness.data.HealthFields.OXYGEN_THERAPY_ADMINISTRATION_MODE_NASAL_CANULA;
-import static com.google.android.gms.fitness.data.HealthFields.OXYGEN_THERAPY_ADMINISTRATION_MODE_NASAL_CANULA;
-import static com.google.android.gms.fitness.data.HealthFields.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class HomeFragment extends Fragment implements
@@ -104,8 +78,16 @@ public class HomeFragment extends Fragment implements
     TextView bodyTemperature;
     TextView name;
     Handler mHandler;
+    String email;
     String ID="health";
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -118,8 +100,6 @@ public class HomeFragment extends Fragment implements
                 .addConnectionCallbacks(this)
                 .build();
         GoogleApiClient.connect();
-
-
         return binding.getRoot();
 
     }
@@ -141,7 +121,7 @@ public class HomeFragment extends Fragment implements
        SpO2=getView().findViewById(R.id.oxygen_blood);
        name=getView().findViewById(R.id.name);
        ActivityMain m=  (ActivityMain) getActivity();
-    //   String eamil=m.getEamil();
+       this.email= m.getEamil().trim();
         FitnessOptions fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_HEART_RATE_SUMMARY, FitnessOptions.ACCESS_READ)
@@ -154,31 +134,7 @@ public class HomeFragment extends Fragment implements
                     GoogleSignIn.getLastSignedInAccount(getContext()),
                     fitnessOptions);
         }
-        List<Accountpilgrim> account = new ArrayList<>();
-        FirebaseFirestore db =FirebaseFirestore.getInstance();
-        db.collection("Account_For_pilgrim")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document : task.getResult()){
-                                Accountpilgrim miss = document.toObject(Accountpilgrim.class);
-                                Log.e("data",document.getData().toString());
 
-                                account.add(miss);
-                            }
-                        }
-                     /*   for (int i=0; account.size()> i;i++){
-                            if(account.get(i).getEamil().equals(eamil)){
-                                name.setText(account.get(i).getFirstName()+" "+account.get(i).getLastName());
-                            }
-                            else{
-                                name.setText("");
-                            }
-                        }*/
-                    }
-                });
        reload();
 
         binding.location.setOnClickListener(new View.OnClickListener() {
@@ -194,9 +150,36 @@ public class HomeFragment extends Fragment implements
             }
         });
     }
+    public void name(){
+        List<Account> account = new ArrayList<>();
+        FirebaseFirestore db =FirebaseFirestore.getInstance();
+        db.collection("Account_For_pilgrim")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document : task.getResult()){
+                                Account miss = document.toObject(Account.class);
+                                Log.e("data",document.getData().toString());
+                                account.add(miss);
+
+                            }
+                            for (int i=0; account.size()> i;i++){
+                                if(email.equals(account.get(i).getEamil())){
+                                    name.setText(account.get(i).getFirstName()+" "+account.get(i).getLastName());
+                                }
+                                else{
+                                    name.setText("");
+                                }
+                            }
+
+                        }
+                    }
+                });
+    }
+
 private void reload(){
-
-
         List<vital> vitals = new ArrayList<>();
         Random rand =new Random();
         accessGoogleFitBP();
@@ -225,8 +208,6 @@ private void reload(){
                                  notification("Attention your Blood oxygen is low !");
                             }
 
-
-
                         } else {
                             Log.d("MissionActivity", "Error getting documents: ", task.getException());
                         }
@@ -250,11 +231,7 @@ private void reload(){
                         .bigText(s))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
-
-
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
-
-// notificationId is a unique int for each notification that you must define
         notificationManager.notify(0, builder.build());
     }
 
@@ -269,7 +246,6 @@ private void reload(){
             notificationChannel.setDescription(description);
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.RED);
-
             notificationManager.createNotificationChannel(notificationChannel);
         }
     }
@@ -311,8 +287,6 @@ private void reload(){
                         else {
                            blood_pressure.setText(showDataSetBP(dataSet));
                         }
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -325,7 +299,6 @@ private void reload(){
                     @Override
                     public void onComplete(@NonNull Task<DataSet> task) {
                         Log.d("Status","Complete");
-
                     }
                 });
     }
@@ -355,8 +328,6 @@ private void reload(){
                         else {
                           heartRate.setText(showDataSetHR(dataSet));
                         }
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -369,7 +340,6 @@ private void reload(){
                     @Override
                     public void onComplete(@NonNull Task<DataSet> task) {
                         Log.d("Status","Complete");
-
                     }
                 });
     }
@@ -391,7 +361,7 @@ private void reload(){
 
             }
             if(dp.getValue(dp.getDataType().getFields().get(0)).asFloat() >100){
-
+                notification("Attention your heart rate is high !");
             }
             return ""+ dp.getValue(dp.getDataType().getFields().get(0)).asFloat() +" Bpm";
         }
@@ -414,6 +384,12 @@ private void reload(){
                         " Value: " + dp.getValue(field));
 
             }
+            if(dp.getValue(dp.getDataType().getFields().get(0)).asFloat() >=140 ||  dp.getValue(dp.getDataType().getFields().get(3)).asFloat() >= 90){
+                notification("Attention your blood pressure is high !");
+            }
+            else if(dp.getValue(dp.getDataType().getFields().get(0)).asFloat() <=90||  dp.getValue(dp.getDataType().getFields().get(3)).asFloat() <= 60){
+                notification("Attention your blood pressure is low !");
+            }
                 return ""+ dp.getValue(dp.getDataType().getFields().get(0)).asFloat()+"/"
                     +dp.getValue(dp.getDataType().getFields().get(3)).asFloat()
             +" mmHg";
@@ -425,6 +401,7 @@ private void reload(){
     @Override
     public void onStart() {
         super.onStart();
+        GoogleApiClient.connect();
 
     }
 
@@ -493,11 +470,9 @@ Log.e("google fit","connected ");
         }
     }
 
-    class background extends Thread {
-
-        @Override
-        public void run() {
-            super.run();
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        name.setText(email);
     }
 }

@@ -2,6 +2,7 @@ package com.example.hsmb;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -29,7 +30,8 @@ public class ActivityMain extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        eamil=getIntent().getStringExtra("eamil");
+        this.eamil=getIntent().getStringExtra("email");
+        Log.e("email",eamil);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
