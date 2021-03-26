@@ -4,28 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF" >
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="1000dp"
-        app:srcCompat="@drawable/hsmb1"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-119dp" />
+    android:background="#FFFFFF"
+    tools:background="@drawable/hsmb1">
 
     <WebView
         android:layout_width="316dp"
         android:layout_height="529dp"
-        tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="69dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pilgrim"
+        android:text="Go To Webex"
         app:backgroundTint="#054A44"
-        tools:layout_editor_absoluteX="315dp"
-        tools:layout_editor_absoluteY="680dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.876"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.942" />
 </androidx.constraintlayout.widget.ConstraintLayout>
