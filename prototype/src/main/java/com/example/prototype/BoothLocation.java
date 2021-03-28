@@ -7,8 +7,13 @@ public class BoothLocation {
     private String latitude;
     private String longitude;
     private String IDAccount;
+    private String IDdecoment;
 
     public BoothLocation() {
+    }
+
+    public BoothLocation(String IDdecoment) {
+        this.IDdecoment = IDdecoment;
     }
 
     public BoothLocation(String IDLocation, String state, String latitude, String longitude, String IDAccount) {
@@ -19,6 +24,13 @@ public class BoothLocation {
         this.IDAccount = IDAccount;
     }
 
+    public void setIDdecoment(String IDdecoment) {
+        this.IDdecoment = IDdecoment;
+    }
+
+    public String getIDdecoment() {
+        return IDdecoment;
+    }
 
     public void setIDLocation(String IDLocation) {
         this.IDLocation = IDLocation;

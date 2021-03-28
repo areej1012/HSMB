@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        new Handler().postDelayed(new Runnable() {
 
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 

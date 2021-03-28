@@ -30,8 +30,8 @@ public class ActivityMain extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.eamil=getIntent().getStringExtra("email");
-        Log.e("email",eamil);
+        //this.eamil=getIntent().getStringExtra("email");
+//        Log.e("email",eamil);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each

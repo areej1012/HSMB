@@ -38,14 +38,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_gallery);
+        setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map2);
+                .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        //Initialize fused location
-        client = LocationServices.getFusedLocationProviderClient(this);
-        getCurrentLocation();
 
     }
 
@@ -78,9 +75,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        for(int i=0;i<arrayList.size();i++){
-            mMap.addMarker(new MarkerOptions().position(arrayList.get(i)).title("Marker"));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.5f));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
-    }
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+
 }}

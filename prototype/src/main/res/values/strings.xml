@@ -7,4 +7,5 @@
     <string name="login"> Login</string>
     <string name="type">Who Are You?</string>
     <string name="Hello">Hello pilgrim</string>
+    <string name="scan">Please Scan QR Code That Front of You </string>
 </resources>

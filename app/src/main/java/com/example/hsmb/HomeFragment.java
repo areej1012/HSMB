@@ -120,8 +120,8 @@ public class HomeFragment extends Fragment implements
        bodyTemperature=getView().findViewById(R.id.body_temperature);
        SpO2=getView().findViewById(R.id.oxygen_blood);
        name=getView().findViewById(R.id.name);
-       ActivityMain m=  (ActivityMain) getActivity();
-       this.email= m.getEamil().trim();
+    /*   ActivityMain m=  (ActivityMain) getActivity();
+       this.email= m.getEamil().trim();*/
         FitnessOptions fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_HEART_RATE_SUMMARY, FitnessOptions.ACCESS_READ)
@@ -133,19 +133,17 @@ public class HomeFragment extends Fragment implements
                     1,
                     GoogleSignIn.getLastSignedInAccount(getContext()),
                     fitnessOptions);
-        }
 
-       reload();
+        }
+        else {
+            reload();
+        }
 
         binding.location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment LocationBooth = new GalleryFragment();
-                FragmentManager manager=getActivity().getSupportFragmentManager();
-                FragmentTransaction Tre=manager.beginTransaction();
-                Tre.replace(R.id.nav_host_fragment, LocationBooth);
-                Tre.addToBackStack(null);
-                Tre.commit();
+                Intent nextScreen = new Intent(getContext(),  MapsActivity.class);
+                startActivity(nextScreen);
 
             }
         });
@@ -166,7 +164,7 @@ public class HomeFragment extends Fragment implements
 
                             }
                             for (int i=0; account.size()> i;i++){
-                                if(email.equals(account.get(i).getEamil())){
+                                if(email.equals(account.get(i).getEmail())){
                                     name.setText(account.get(i).getFirstName()+" "+account.get(i).getLastName());
                                 }
                                 else{
@@ -464,9 +462,11 @@ Log.e("google fit","connected ");
                 }
             } else if( resultCode == RESULT_CANCELED ) {
                 Log.e( "GoogleFit", "RESULT_CANCELED" );
+
             }
         } else {
             Log.e("GoogleFit", "requestCode NOT request_oauth");
+            reload();
         }
     }
 

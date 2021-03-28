@@ -30,7 +30,7 @@ public class TypeAccount extends AppCompatActivity {
     }
 
     private void LogPilgrim() {
-        Intent nextScreen = new Intent(TypeAccount.this,  LoginPilgrim.class);
+        Intent nextScreen = new Intent(TypeAccount.this,  Camera.class);
         startActivity(nextScreen);
     }
 
