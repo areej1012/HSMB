@@ -30,10 +30,10 @@
                 android:layout_gravity="center"
                 android:layout_margin="92dp"
                 android:layout_marginTop="50dp"
-                android:src="@drawable/iconremovebgpreview" />
+                android:src="@drawable/iconto" />
 
             <EditText
-                android:id="@+id/Email"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_gravity="center"

@@ -145,6 +145,7 @@ public class HomeFragment extends Fragment implements
                 Intent nextScreen = new Intent(getContext(),  MapsActivity.class);
                 startActivity(nextScreen);
 
+
             }
         });
     }

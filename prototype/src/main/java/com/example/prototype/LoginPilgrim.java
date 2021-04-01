@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,12 +27,13 @@ public class LoginPilgrim  extends AppCompatActivity {
     String ID;
     String IdAccount;
     ArrayList<AccountPilgrim> account = new ArrayList<>();
+    String IDR;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        emailEditText = findViewById(R.id.Email);
+        emailEditText = findViewById(R.id.name);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.log_in);
         ID= getIntent().getStringExtra("IDBooth");
@@ -77,8 +77,8 @@ public class LoginPilgrim  extends AppCompatActivity {
                                         IdAccount=account.get(i).getID();
                                         UpdateID(account.get(i).getID());
                                         UpdateState();
-                                        Intent nextScreen = new Intent(LoginPilgrim.this, pilgrimPage.class);
-                                        startActivity(nextScreen);
+
+
                                     } else {
                                         Toast.makeText(getApplicationContext(), "The password is wrong", Toast.LENGTH_LONG).show();
                                         emailEditText.setError("Write the right password.");
@@ -101,32 +101,33 @@ public class LoginPilgrim  extends AppCompatActivity {
     }
 
     private void UpdateState() {
-     ArrayList<BoothLocation> booth= new ArrayList<>();
+        ArrayList<BoothLocation> booth = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("BoothLocation")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot decoment : task.getResult()){
-                                BoothLocation boothLocation= decoment.toObject(BoothLocation.class);
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot decoment : task.getResult()) {
+                                BoothLocation boothLocation = decoment.toObject(BoothLocation.class);
                                 boothLocation.setIDdecoment(decoment.getId());
-                                booth.add(boothLocation);
+                                if (ID.equals(boothLocation.getIDLocation())) {
+                                    db.collection("BoothLocation")
+                                            .document(boothLocation.getIDdecoment())
+                                            .update("State", "busy", "idAccount", IdAccount);
+                                    IDR = boothLocation.getIDdecoment();
+                                    Toast.makeText(getApplicationContext(), "T " + IDR, Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
-                        Log.e("IDBooth",ID);
-                        for (int i =0 ;booth.size()>i;i++){
-                            if(ID.equals(booth.get(i).getIDLocation())){
-                                Log.e("Upsa",booth.get(i).getIDLocation());
-                                db.collection("BoothLocation")
-                                        .document(booth.get(i).getIDdecoment())
-                                        .update("State","busy","idAccount",IdAccount);
+                        Intent nextScreen = new Intent(LoginPilgrim.this, pilgrimPage.class);
+                        nextScreen.putExtra("ID",IDR);
+                        startActivity(nextScreen);
 
-                            }
-                        }
                     }
                 });
 
     }
+
 }

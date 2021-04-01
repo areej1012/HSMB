@@ -1,37 +1,38 @@
-package com.example.prototype;
+package com.example.hsmb;
 
-public class BoothLocation {
-
+public class booths {
     private String IDLocation;
     private String State;
     private String latitude;
     private String longitude;
-    private String idAccount;
+    private String IDAccount;
     private String IDdecoment;
 
-    public BoothLocation() {
+    public booths() {
     }
 
-    public BoothLocation(String IDdecoment) {
+    public booths(String IDdecoment) {
         this.IDdecoment = IDdecoment;
     }
 
-    public BoothLocation(String IDLocation, String state, String latitude, String longitude, String idAccount) {
+    public booths(String IDLocation, String state, String latitude, String longitude, String IDAccount) {
         this.IDLocation = IDLocation;
         State = state;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.idAccount = idAccount;
+        this.IDAccount = IDAccount;
     }
 
     public void setIDAccount(String IDAccount) {
-        this.idAccount = IDAccount;
+        this.IDAccount = IDAccount;
     }
-
-
 
     public void setIDdecoment(String IDdecoment) {
         this.IDdecoment = IDdecoment;
+    }
+
+    public String getIDdecoment() {
+        return IDdecoment;
     }
 
     public void setIDLocation(String IDLocation) {
@@ -67,9 +68,6 @@ public class BoothLocation {
     }
 
     public String getIDAccount() {
-        return idAccount;
-    }
-    public String getIDdecoment() {
-        return IDdecoment;
+        return IDAccount;
     }
 }

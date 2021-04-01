@@ -7,69 +7,69 @@
     android:background="@drawable/hsmb1">
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/Panadol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Panadol"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.314"
+        app:layout_constraintHorizontal_bias="0.207"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.484" />
+        app:layout_constraintVertical_bias="0.386" />
 
     <CheckBox
-        android:id="@+id/checkBox3"
+        android:id="@+id/Fevadol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fevadol"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.312"
+        app:layout_constraintHorizontal_bias="0.206"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.565" />
+        app:layout_constraintVertical_bias="0.483" />
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/Asprine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Asprine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.311"
+        app:layout_constraintHorizontal_bias="0.208"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.645" />
+        app:layout_constraintVertical_bias="0.575" />
 
     <CheckBox
-        android:id="@+id/checkBox4"
+        android:id="@+id/Paracetmol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Paracetmol"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.335"
+        app:layout_constraintHorizontal_bias="0.224"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.736" />
+        app:layout_constraintVertical_bias="0.667" />
 
     <CheckBox
-        android:id="@+id/checkBox5"
+        android:id="@+id/Citalopram"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Citalopram"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.332"
+        app:layout_constraintHorizontal_bias="0.222"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.816" />
+        app:layout_constraintVertical_bias="0.758" />
 
     <ImageView
         android:id="@+id/imageView8"
-        android:layout_width="365dp"
-        android:layout_height="285dp"
+        android:layout_width="299dp"
+        android:layout_height="185dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.347"
@@ -77,5 +77,91 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.035"
         app:srcCompat="@drawable/iconremovebgpreview" />
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#054A44"
+        android:text="send prescription"
+        app:backgroundTint="#054A44"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.953" />
+
+    <EditText
+        android:id="@+id/numberPanadol"
+        android:layout_width="140dp"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:hint="Number"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.652"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.388" />
+
+    <EditText
+        android:id="@+id/numberFevadol"
+        android:layout_width="140dp"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:hint="Number"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.653"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.478" />
+
+
+    <EditText
+        android:id="@+id/numberAsprine"
+        android:layout_width="140dp"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:hint="Number"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.653"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.57" />
+
+    <EditText
+        android:id="@+id/numberParacetmol"
+        android:layout_width="140dp"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:hint="Number"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.701"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.67" />
+
+
+    <EditText
+        android:id="@+id/numberCitalopram"
+        android:layout_width="140dp"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:hint="Number"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.701"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.751" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
