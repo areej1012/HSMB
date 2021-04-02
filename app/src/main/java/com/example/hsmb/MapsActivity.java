@@ -1,6 +1,5 @@
 package com.example.hsmb;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -8,7 +7,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -19,12 +17,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -32,38 +26,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     FusedLocationProviderClient client;
-    private static final int REQUEST_CODE = 101;
+    private static final int REQUEST_CODE=101;
     Location currentLocation;
 
 
-    ArrayList<booths> arrayList = new ArrayList<>();
-    ArrayList<LatLng>location = new ArrayList<LatLng>();
-    LatLng pilgrim = new LatLng(21.413776, 39.886360);
-    SupportMapFragment mapFragment;
-    FirebaseFirestore db;
+    ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
+
+    LatLng all = new LatLng(21.3905547,40.0087896);
+    LatLng Booth1 = new LatLng(21.428756,39.9352357);
+    LatLng Booth2=new LatLng(21.384893,39.9546247);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-         db= FirebaseFirestore.getInstance();
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-
-
-        mapFragment.getMapAsync(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-
-
-
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        arrayList.add(all);
+        arrayList.add(Booth1);
+        arrayList.add(Booth2);
 
 
     }
-private void getBooths(){
 
-}
-
-
-
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,new String[]
+                    {Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+            return;
+        }
+        Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location!=null)
+                currentLocation=location;
+            }
+        });
+    }
 
     /**
      * Manipulates the map once available.
@@ -77,38 +79,17 @@ private void getBooths(){
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        db.collection("BoothLocation")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot decomunt: task.getResult()){
-                                booths booths =decomunt.toObject(booths.class);
-                                if(booths.getState().equals("free")){
-                                    Log.e("done",booths.getState());
-                                    arrayList.add(booths);
-
-                                }
-                            }
-                        }
-                    }
-                });
-        Log.e("numberlist",""+arrayList.size());
-
-        for(int i=0;i<arrayList.size();i++){
-            MarkerOptions  markerOptions = new MarkerOptions().position(new LatLng(Double.parseDouble(arrayList.get(i).getLatitude()),
-                    Double.parseDouble(arrayList.get(i).getLongitude()))).title("Marker");
-
-
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(location.get(i)));
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            mMap.addMarker(markerOptions);
+        for(int i=0;i<arrayList.size();i++) {
+            mMap.addMarker((new MarkerOptions().position(arrayList.get(i)).title("Booth").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))));
+            mMap.animateCamera((CameraUpdateFactory.zoomTo(15.0f)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(arrayList.get(i)));
 
 
         }
-    }
-}
+        // Add a marker in Sydney and move the camera
+        LatLng mina = new LatLng(21.342823,39.977253);
+        mMap.addMarker(new MarkerOptions().position(mina).title("Pilgrim"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mina));
+
+
+}}

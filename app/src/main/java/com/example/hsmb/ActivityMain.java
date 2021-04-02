@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.example.hsmb.ui.gallery.GalleryFragment;
+import com.example.hsmb.ui.gallery.GalleryViewModel;
+import com.example.hsmb.ui.home.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,7 +54,25 @@ public class ActivityMain extends AppCompatActivity {
         return true;
 
     }
+    @Override
+public boolean onOptionsItemSelected(MenuItem item){
+        int id=item.getItemId();
+        if(id==R.id.nav_logout){
+            Intent intent2=new Intent(ActivityMain.this,Welcom.class);
+            startActivity(intent2);
+            return true;}
+        else if(id==R.id.nav_gallery){
+            Intent intent1=new Intent(ActivityMain.this,MapsActivity.class);
+            startActivity(intent1);
+            return true;}
+        else if(id==R.id.nav_home){
+            Intent intent=new Intent(ActivityMain.this,HomeFragment.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
 
+}
   /*  public void to_vital(View v){
         Intent intent=new Intent(ActivityMain.this,HomeFragment.class);
         startActivity(getIntent());
