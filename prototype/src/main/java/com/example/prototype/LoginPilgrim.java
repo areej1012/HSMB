@@ -117,7 +117,7 @@ public class LoginPilgrim  extends AppCompatActivity {
                                             .document(boothLocation.getIDdecoment())
                                             .update("State", "busy", "idAccount", IdAccount);
                                     IDR = boothLocation.getIDdecoment();
-                                    Toast.makeText(getApplicationContext(), "T " + IDR, Toast.LENGTH_SHORT).show();
+
                                 }
                             }
                         }

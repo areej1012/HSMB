@@ -70,8 +70,8 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
 
         Intent nextScreen = new Intent(LoginActivity.this,  ActivityMain.class);
-    /*    nextScreen.putExtra("email", user.getEmail()) ;
-        Log.e("user",user.getEmail().trim());*/
+        nextScreen.putExtra("email", user.getEmail()) ;
+        Log.e("user",user.getEmail().trim());
         startActivity(nextScreen);
 
     }

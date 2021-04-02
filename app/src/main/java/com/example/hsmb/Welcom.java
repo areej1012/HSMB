@@ -24,7 +24,7 @@ public class Welcom extends AppCompatActivity {
             @Override
             public void run() {
 
-                Intent startLandingPageActivity = new Intent(Welcom.this, MapsActivity.class);
+                Intent startLandingPageActivity = new Intent(Welcom.this, LoginActivity.class);
                 startActivity(startLandingPageActivity);
                 finish(); //This closes current activity
             }

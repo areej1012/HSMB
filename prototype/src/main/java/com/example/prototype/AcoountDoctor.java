@@ -9,11 +9,12 @@ public class AcoountDoctor {
     private String password;
     private String MedicalSpecialty;
     private String idLocation;
+    private String webex;
 
     public AcoountDoctor() {
     }
 
-    public AcoountDoctor(String firstName, String lastName, int age, String nationality, String email, String password, String medicalSpecialty, String idLocation) {
+    public AcoountDoctor(String firstName, String lastName, int age, String nationality, String email, String password, String medicalSpecialty, String idLocation, String webex) {
         FirstName = firstName;
         LastName = lastName;
         Age = age;
@@ -22,6 +23,7 @@ public class AcoountDoctor {
         this.password = password;
         MedicalSpecialty = medicalSpecialty;
         this.idLocation = idLocation;
+        this.webex = webex;
     }
 
     public void setFirstName(String firstName) {
@@ -56,6 +58,10 @@ public class AcoountDoctor {
         this.idLocation = idLocation;
     }
 
+    public void setWebex(String webex) {
+        this.webex = webex;
+    }
+
     public String getFirstName() {
         return FirstName;
     }
@@ -86,5 +92,9 @@ public class AcoountDoctor {
 
     public String getIdLocation() {
         return idLocation;
+    }
+
+    public String getWebex() {
+        return webex;
     }
 }
