@@ -120,13 +120,13 @@ public class HomeFragment extends Fragment implements
        bodyTemperature=getView().findViewById(R.id.body_temperature);
        SpO2=getView().findViewById(R.id.oxygen_blood);
        name=getView().findViewById(R.id.name);
-      ActivityMain m=  (ActivityMain) getActivity();
-       this.email= m.getEamil().trim();
+    /*   ActivityMain m=  (ActivityMain) getActivity();
+       this.email= m.getEamil().trim();*/
         FitnessOptions fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_HEART_RATE_SUMMARY, FitnessOptions.ACCESS_READ)
                 .build();
-        name();
+
         if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(getContext()), fitnessOptions)) {
             GoogleSignIn.requestPermissions(
                     this, // your activity
@@ -137,7 +137,6 @@ public class HomeFragment extends Fragment implements
         }
         else {
             reload();
-
         }
 
         binding.location.setOnClickListener(new View.OnClickListener() {
@@ -213,7 +212,7 @@ private void reload(){
                         }
                     }
                 });
-        refresh(600000);
+        refresh(100000);
 
     }
 
@@ -475,6 +474,6 @@ Log.e("google fit","connected ");
     @Override
     public void onResume() {
         super.onResume();
-
+        name.setText(email);
     }
 }

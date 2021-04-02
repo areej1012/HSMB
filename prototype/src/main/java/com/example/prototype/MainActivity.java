@@ -1,19 +1,14 @@
 package com.example.prototype;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 import com.example.prototype.ui.main.SectionsPagerAdapter;
 
@@ -22,10 +17,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        setContentView(R.layout.pilgrim);
+        //SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        VideoView videoView=findViewById(R.id.video_view);
+        String videoPath="android.resource://"+getPackageName()+"/"+R.raw.video;
+        Uri uri=Uri.parse(videoPath);
 
-        new Handler().postDelayed(new Runnable() {
+        videoView.setVideoURI(uri);
+        MediaController mediaController=new MediaController(this);
+        videoView.setMediaController(mediaController);
+        mediaController.setAnchorView(videoView);
+        /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
@@ -33,7 +35,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startLandingPageActivity);
                 finish(); //This closes current activity
             }
-        }, 1000); //It means 1 seconds
+        }, 1000); //It means 1 seconds*/
+
+
+
 
 
 
