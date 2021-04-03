@@ -130,4 +130,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.953" />
 
+    <Button
+        android:id="@+id/refesh"
+        android:layout_width="57dp"
+        android:layout_height="38dp"
+        android:background="#FFFFFF"
+        android:textColorHighlight="#054A44"
+        app:icon="@android:drawable/ic_popup_sync"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.939" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

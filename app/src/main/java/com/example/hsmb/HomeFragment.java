@@ -78,7 +78,7 @@ public class HomeFragment extends Fragment implements
     TextView bodyTemperature;
     TextView name;
     Handler mHandler;
-    String email;
+    String email , Name;
     String ID="health";
 
     public String getEmail() {
@@ -120,8 +120,8 @@ public class HomeFragment extends Fragment implements
        bodyTemperature=getView().findViewById(R.id.body_temperature);
        SpO2=getView().findViewById(R.id.oxygen_blood);
        name=getView().findViewById(R.id.name);
-    /*   ActivityMain m=  (ActivityMain) getActivity();
-       this.email= m.getEamil().trim();*/
+      ActivityMain m=  (ActivityMain) getActivity();
+       this.email= m.getEamil().trim();
         FitnessOptions fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_HEART_RATE_SUMMARY, FitnessOptions.ACCESS_READ)
@@ -133,9 +133,10 @@ public class HomeFragment extends Fragment implements
                     1,
                     GoogleSignIn.getLastSignedInAccount(getContext()),
                     fitnessOptions);
-
+            name();
         }
         else {
+            name();
             reload();
         }
 
@@ -166,6 +167,7 @@ public class HomeFragment extends Fragment implements
                             }
                             for (int i=0; account.size()> i;i++){
                                 if(email.equals(account.get(i).getEmail())){
+                                    Name=account.get(i).getFirstName()+" "+account.get(i).getLastName();
                                     name.setText(account.get(i).getFirstName()+" "+account.get(i).getLastName());
                                 }
                                 else{
@@ -468,12 +470,13 @@ Log.e("google fit","connected ");
         } else {
             Log.e("GoogleFit", "requestCode NOT request_oauth");
             reload();
+            name.setText(Name);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        name.setText(email);
+        name.setText(Name);
     }
 }

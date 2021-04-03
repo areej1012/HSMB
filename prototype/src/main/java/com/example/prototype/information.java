@@ -31,6 +31,7 @@ public class information extends AppCompatActivity {
     String IDBooth;
     Button pharmacy;
     String IDR;
+    Button ref;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +45,14 @@ public class information extends AppCompatActivity {
          BP=findViewById(R.id.BP);
          SpO2=findViewById(R.id.SpO2);
          pharmacy=findViewById(R.id.pharmacy);
+         ref=findViewById(R.id.refesh);
 
+         ref.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 getBooth();
+             }
+         });
          getBooth();
          pharmacy.setOnClickListener(new View.OnClickListener() {
              @Override

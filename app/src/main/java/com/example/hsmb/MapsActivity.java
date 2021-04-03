@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -40,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<LatLng>location = new ArrayList<LatLng>();
     LatLng pilgrim = new LatLng(21.413776, 39.886360);
     SupportMapFragment mapFragment;
-    FirebaseFirestore db;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,19 +49,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
          db= FirebaseFirestore.getInstance();
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-
-
         mapFragment.getMapAsync(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
-
-
+        db.collection("BoothLocation")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        if(document.getString("State").equals("free")){
+                            GeoPoint geo = document.getGeoPoint("geo");String name = document.getString("name");
+                            double lat = geo.getLatitude();
+                            double lng = geo.getLongitude();
+                            LatLng latLng = new LatLng(lat, lng);
+                            mMap.addMarker(new MarkerOptions().position(latLng));
+                            mMap.moveCamera( CameraUpdateFactory.newLatLng(latLng));
+                            mMap.animateCamera(CameraUpdateFactory.zoomTo(20.0f));
+                        }
+                    }
+                }
+            }
+        });
 
 
     }
-private void getBooths(){
-
-}
 
 
 
@@ -78,37 +91,8 @@ private void getBooths(){
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        db.collection("BoothLocation")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot decomunt: task.getResult()){
-                                booths booths =decomunt.toObject(booths.class);
-                                if(booths.getState().equals("free")){
-                                    Log.e("done",booths.getState());
-                                    arrayList.add(booths);
 
-                                }
-                            }
-                        }
-                    }
-                });
-        Log.e("numberlist",""+arrayList.size());
-
-        for(int i=0;i<arrayList.size();i++){
-            MarkerOptions  markerOptions = new MarkerOptions().position(new LatLng(Double.parseDouble(arrayList.get(i).getLatitude()),
-                    Double.parseDouble(arrayList.get(i).getLongitude()))).title("Marker");
-
-
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(location.get(i)));
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            mMap.addMarker(markerOptions);
 
 
         }
     }
-}

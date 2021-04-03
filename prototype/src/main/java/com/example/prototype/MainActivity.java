@@ -17,17 +17,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pilgrim);
-        //SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        VideoView videoView=findViewById(R.id.video_view);
-        String videoPath="android.resource://"+getPackageName()+"/"+R.raw.video;
-        Uri uri=Uri.parse(videoPath);
+        setContentView(R.layout.activity_main);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
-        videoView.setVideoURI(uri);
-        MediaController mediaController=new MediaController(this);
-        videoView.setMediaController(mediaController);
-        mediaController.setAnchorView(videoView);
-        /*new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
