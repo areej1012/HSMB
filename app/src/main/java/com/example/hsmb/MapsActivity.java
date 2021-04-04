@@ -35,10 +35,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FusedLocationProviderClient client;
     private static final int REQUEST_CODE = 101;
     Location currentLocation;
-
-
-    ArrayList<booths> arrayList = new ArrayList<>();
-    ArrayList<LatLng>location = new ArrayList<LatLng>();
     LatLng pilgrim = new LatLng(21.413776, 39.886360);
     SupportMapFragment mapFragment;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -59,18 +55,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(task.isSuccessful()) {
                     for(QueryDocumentSnapshot document : task.getResult()){
                         if(document.getString("State").equals("free")){
-                            GeoPoint geo = document.getGeoPoint("geo");String name = document.getString("name");
+                            GeoPoint geo = document.getGeoPoint("geo");
                             double lat = geo.getLatitude();
                             double lng = geo.getLongitude();
                             LatLng latLng = new LatLng(lat, lng);
                             mMap.addMarker(new MarkerOptions().position(latLng));
                             mMap.moveCamera( CameraUpdateFactory.newLatLng(latLng));
-                            mMap.animateCamera(CameraUpdateFactory.zoomTo(20.0f));
+                            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
                         }
                     }
                 }
             }
         });
+
 
 
     }
