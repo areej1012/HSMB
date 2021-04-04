@@ -59,7 +59,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             double lat = geo.getLatitude();
                             double lng = geo.getLongitude();
                             LatLng latLng = new LatLng(lat, lng);
-                            mMap.addMarker(new MarkerOptions().position(latLng));
+                            mMap.addMarker(new MarkerOptions().position(latLng).title("Free"));
+                            mMap.moveCamera( CameraUpdateFactory.newLatLng(latLng));
+                            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+                        }
+                        else  if(document.getString("State").equals("busy")){
+                            GeoPoint geo = document.getGeoPoint("geo");
+                            double lat = geo.getLatitude();
+                            double lng = geo.getLongitude();
+                            LatLng latLng = new LatLng(lat, lng);
+                            mMap.addMarker(new MarkerOptions().position(latLng).title("Busy").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                            mMap.moveCamera( CameraUpdateFactory.newLatLng(latLng));
+                            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+                        }
+                        else  if(document.getString("State").equals("Sterilization")){
+                            GeoPoint geo = document.getGeoPoint("geo");
+                            double lat = geo.getLatitude();
+                            double lng = geo.getLongitude();
+                            LatLng latLng = new LatLng(lat, lng);
+                            mMap.addMarker(new MarkerOptions().position(latLng).title("Sterilization").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                             mMap.moveCamera( CameraUpdateFactory.newLatLng(latLng));
                             mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
                         }
