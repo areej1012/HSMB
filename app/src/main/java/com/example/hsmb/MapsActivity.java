@@ -72,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             mMap.moveCamera( CameraUpdateFactory.newLatLng(latLng));
                             mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
                         }
-                        else  if(document.getString("State").equals("Sterilization")){
+                        else  if(document.getString("State").equals("sterilization")){
                             GeoPoint geo = document.getGeoPoint("geo");
                             double lat = geo.getLatitude();
                             double lng = geo.getLongitude();

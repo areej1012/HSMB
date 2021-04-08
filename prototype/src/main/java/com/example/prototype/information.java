@@ -15,6 +15,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -106,14 +107,30 @@ public class information extends AppCompatActivity {
                                     name.setText("Name: "+acco.getFirstName()+" "+acco.getLastName());
                                     age.setText("Age: "+acco.getAge());
                                     Chronice.setText("Chronice: "+acco.getMedical_background());
-                                    ST.setText("ST: "+acco.getST());
-                                    HR.setText("HR: "+acco.getHR());
-                                    BP.setText("BP: "+acco.getBP());
-                                    SpO2.setText("SpO2: "+acco.getSpO2());
+                                    ST.setText("ST: "+acco.getST()+" \u2103");
+                                    HR.setText("HR: "+acco.getHR()+" Bpm");
+                                    BP.setText("BP: "+acco.getBP()+" mmHg");
+                                    SpO2.setText("SpO2: "+acco.getSpO2()+" %");
+
                                 }
                             }
                         }
                     }
                 });
+        ArrayList<VitalSigns> vitalSigns= new ArrayList<>();
+        db.collection("VitalSigns").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+           if(task.isSuccessful()){
+               for(QueryDocumentSnapshot docment : task.getResult()){
+                   VitalSigns v= docment.toObject(VitalSigns.class);
+                   vitalSigns.add(v);
+               }
+               Random rand = new Random();
+               int i= rand.nextInt(vitalSigns.size());
+
+           }
+            }
+        });
     }
 }

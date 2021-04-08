@@ -28,6 +28,7 @@ public class LoginPilgrim  extends AppCompatActivity {
     String IdAccount;
     ArrayList<AccountPilgrim> account = new ArrayList<>();
     String IDR;
+    String IDAccount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class LoginPilgrim  extends AppCompatActivity {
                             for (int i = 0; account.size() > i; i++) {
                                 if (email.equals(account.get(i).getEmail())) {
                                     if (password.equals(account.get(i).getPassword())) {
-                                        IdAccount=account.get(i).getID();
+                                        IDAccount=account.get(i).getID();
                                         UpdateID(account.get(i).getID());
                                         UpdateState();
 
@@ -123,6 +124,7 @@ public class LoginPilgrim  extends AppCompatActivity {
                         }
                         Intent nextScreen = new Intent(LoginPilgrim.this, pilgrimPage.class);
                         nextScreen.putExtra("ID",IDR);
+                        nextScreen.putExtra("IDAccount",IDAccount);
                         startActivity(nextScreen);
 
                     }

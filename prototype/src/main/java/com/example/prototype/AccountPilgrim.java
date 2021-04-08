@@ -24,8 +24,8 @@ public class AccountPilgrim {
         this.ID = ID;
     }
 
-    public AccountPilgrim(String firstName, String lastName, int age, String nationality, String email,
-                          String password, String medical_background, String diagnosis, String idLocation, String ST, String HR, String BP, String spO2) {
+    public AccountPilgrim(String firstName, String lastName, int age, String nationality, String email, String password,
+                          String medical_background, String diagnosis, String idLocation, String ID, String ST, String HR, String BP, String spO2) {
         FirstName = firstName;
         LastName = lastName;
         Age = age;
@@ -35,22 +35,39 @@ public class AccountPilgrim {
         Medical_background = medical_background;
         this.diagnosis = diagnosis;
         this.idLocation = idLocation;
+        this.ID = ID;
         this.ST = ST;
         this.HR = HR;
         this.BP = BP;
         SpO2 = spO2;
     }
 
+    public String getST() {
+        return ST;
+    }
+
     public void setST(String ST) {
         this.ST = ST;
+    }
+
+    public String getHR() {
+        return HR;
     }
 
     public void setHR(String HR) {
         this.HR = HR;
     }
 
+    public String getBP() {
+        return BP;
+    }
+
     public void setBP(String BP) {
         this.BP = BP;
+    }
+
+    public String getSpO2() {
+        return SpO2;
     }
 
     public void setSpO2(String spO2) {
@@ -137,19 +154,5 @@ public class AccountPilgrim {
         return idLocation;
     }
 
-    public String getST() {
-        return ST;
-    }
 
-    public String getHR() {
-        return HR;
-    }
-
-    public String getBP() {
-        return BP;
-    }
-
-    public String getSpO2() {
-        return SpO2;
-    }
 }

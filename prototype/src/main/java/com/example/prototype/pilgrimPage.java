@@ -18,6 +18,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ThrowOnExtraProperties;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +31,7 @@ public class pilgrimPage extends AppCompatActivity {
     Button logout;
     VideoView videoView;
     String IDBooth;
+    String IDAccount;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +40,9 @@ public class pilgrimPage extends AppCompatActivity {
         webex=findViewById(R.id.button3);
         videoView=findViewById(R.id.video_view);
         String ID=getIntent().getStringExtra("ID");
+        IDAccount= getIntent().getStringExtra("IDAccount");
+        video();
+        ReadFile();
       logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,15 +89,36 @@ public class pilgrimPage extends AppCompatActivity {
 
 
     private void video() {
-       /*
         String videoPath="android.resource://"+getPackageName()+"/"+R.raw.video;
         Uri uri=Uri.parse(videoPath);
 
         videoView.setVideoURI(uri);
         MediaController mediaController=new MediaController(this);
         videoView.setMediaController(mediaController);
-        mediaController.setAnchorView(videoView);*/
+        mediaController.setAnchorView(videoView);
     }
 
 
+    private void ReadFile() {
+        String data="";
+        String last="";
+       StringBuffer buffer= new StringBuffer();
+        InputStream file =this.getResources().openRawResource(R.raw.hearreat);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(file));
+        if (file !=null){
+            try{
+                while((data= reader.readLine())!= null){
+                    buffer.append(data +"n");
+                    last=data;
+                }
+
+                file.close();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        FirebaseFirestore db =FirebaseFirestore.getInstance();
+        db.collection("Account_For_pilgrim").document(IDAccount).update("HR",last.substring(18,last.length()));
+    }
 }
