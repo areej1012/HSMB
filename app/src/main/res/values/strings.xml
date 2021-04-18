@@ -20,7 +20,7 @@
     <string name="blood_pressure">blood pressure</string>
     <string name="Num_blood_pressure">000-00</string>
     <string name="mmHg">mmHg</string>
-    <string name="location">Nearest booth location</string>
+    <string name="location">nearest booths location</string>
     <string name="name_pilgrim">name pilgrim</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_userName">username</string>
